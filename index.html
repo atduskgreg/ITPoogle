@@ -1,7 +1,6 @@
 <!-- 
 
 TODO: 
-- link to more results
 - add blog blender
 - some styling
 - deploy 
@@ -27,19 +26,21 @@ TODO:
         $("#itpedia .results").empty();
         $("#nyu .results").empty();
 
+        $(".searching").show();
         
         Giggle.q($("#q").val() + " site:itpedia.nyu.edu", function(results){
-        console.log(results)
-        for(i = 0; i < results.length; i++){
-          $("#itpedia .results").append('<li><a href="'+results[i].url+'">'+results[i].title+'</a></li>');
-        }
-        
-        $("#itpedia .more-link").attr("href", Giggle.googleUrl);
+          $("#itpedia .searching").hide();
 
-      });
+          for(i = 0; i < results.length; i++){
+            $("#itpedia .results").append('<li><a href="'+results[i].url+'">'+results[i].title+'</a></li>');
+          }
+
+          $("#itpedia .more-link").attr("href", Giggle.googleUrl);
+        });
       
         Giggle.q($("#q").val() + " site:itp.nyu.edu", function(results){
-          console.log(results)
+          $("#nyu .searching").hide();
+
           for(i = 0; i < results.length; i++){
             $("#nyu .results").append('<li><a href="'+results[i].url+'">'+results[i].title+'</a></li>');
           }
@@ -65,6 +66,12 @@ TODO:
       float: left;
       width: 400px;
     }
+    
+    .searching {
+      color: #ccc;
+      font-style: italic;
+      display: hidden;
+    }
     </style>
   </head>
   <body>
@@ -78,12 +85,13 @@ TODO:
     </form>
     <div id="itpedia" class="result-section">
       <h2>ITPedia results</h2>
+      <p class="searching">searching...</p>
       <ul class="results"></ul>
       <a class="more-link" href="#">More</a>
     </div>
     <div id="nyu" class="result-section">
       <h2>itp.nyu.edu results</h2>
-        
+      <p class="searching">searching...</p>
       <ul class="results"></ul>
       <a class="more-link" href="#">More</a>
 
