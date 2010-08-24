@@ -1,8 +1,9 @@
 <!-- 
 
 TODO: 
-- add blog blender
 - some styling
+- add blog blender
+- (a system )
 - deploy 
 - progress indicators on searching
 
@@ -16,6 +17,8 @@ TODO:
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script src="giggle.js"></script>
     <script src="sammy-latest.min.js"></script>
+    <link rel="stylesheet" href="blueprint/screen.css" />
+
     <script>
     
     
@@ -23,6 +26,9 @@ TODO:
 
       this.get('#/search/:q', function() {
         $('#q').val(this.params['q']);
+        $("#result-label").html("\"" + this.params['q'] + "\"");
+        $("#result-label").show();
+        
         $("#itpedia .results").empty();
         $("#nyu .results").empty();
 
@@ -32,7 +38,7 @@ TODO:
           $("#itpedia .searching").hide();
 
           for(i = 0; i < results.length; i++){
-            $("#itpedia .results").append('<li><a href="'+results[i].url+'">'+results[i].title+'</a></li>');
+            $("#itpedia .results").append('<li class="'+ ((i%2) ? "even" : "odd") + '"><a href="'+results[i].url+'">'+results[i].title+'</a></li>');
           }
 
           $("#itpedia .more-link").attr("href", Giggle.googleUrl);
@@ -42,7 +48,8 @@ TODO:
           $("#nyu .searching").hide();
 
           for(i = 0; i < results.length; i++){
-            $("#nyu .results").append('<li><a href="'+results[i].url+'">'+results[i].title+'</a></li>');
+            
+            $("#nyu .results").append('<li class="'+ ((i%2) ? "even" : "odd") + '"><a href="'+results[i].url+'">'+results[i].title+'</a></li>');
           }
           $("#nyu .more-link").attr("href", Giggle.googleUrl);
         });
@@ -62,39 +69,105 @@ TODO:
      
     </script>
     <style>
-    .result-section {
-      float: left;
-      width: 400px;
-    }
     
     .searching {
       color: #ccc;
       font-style: italic;
       display: hidden;
     }
+    
+    .border {
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 5px;
+      padding-bottom: 5px;
+      border-right: none;
+    }
+    
+    body {
+      margin-top: 10px;
+    }
+    
+    h1 {
+      text-align: center;
+    }
+    
+    form input, label{
+      font-size: 20px;
+    }
+    
+    form {
+      text-align:center;
+    }
+    
+    h3 {
+      color: #aaa;
+    }
+    
+    ul {
+      list-style-type: none;
+      padding-left: 5px;
+    }
+    
+    li.odd {
+      background-color: #eee;
+    }
+    
+    li {
+      margin-bottom: 5px;
+      font-size: 14px;
+      padding: 2px;
+      padding-left: 5px;
+    }
+    
+    .more-link {
+      background-color: #1111CC;
+      color: #fff;
+      padding: 5px;
+      font-weight: bold;
+    }
+  
+  
+    #result-label {
+      display: hidden;
+      color: #0f7f4f;
+      font-style:italic;
+    }
+    
     </style>
   </head>
   <body>
-    <h1>ITPoogle</h1>
-    <div id="main">
+    <div class="container">
+      <div class="column span-23 border" id="header">
+        <h1><span style="color:#1111CC">ITP</span><span style="color:#CC0000">o</span><span style="color:#DDDD00">o</span><span style="color:#1111CC">g</span><span style="color:#44dd44">l</span><span style="color:#DDDD00">e</span></h1>
+      </div>
+    
+      <div class="column span-23 border">
+        <form id="search" action="#/search">
+          <input id="q" type="text" />
+          <input type="submit" value="search" />
+        </form>
+      </div>
       
-    </div>
-    <form id="search" action="#/search">
-      <input id="q" type="text" />
-      <input type="submit" value="search" />
-    </form>
-    <div id="itpedia" class="result-section">
-      <h2>ITPedia results</h2>
-      <p class="searching">searching...</p>
-      <ul class="results"></ul>
-      <a class="more-link" href="#">More</a>
-    </div>
-    <div id="nyu" class="result-section">
-      <h2>itp.nyu.edu results</h2>
-      <p class="searching">searching...</p>
-      <ul class="results"></ul>
-      <a class="more-link" href="#">More</a>
+      <div class="column span-23">
 
+        
+        <h2>Results <span id="result-label"></span></h2>
+        <div id="itpedia" class="prepend-1 column span-10 ">
+          
+                  
+          <h3 class="border">ITPedia</h3>
+          <p class="searching">searching...</p>
+          <ul class="results"></ul>
+          <a class="more-link column span-10" href="#">More from Google</a>
+        </div>
+        <div id="nyu" class="prepend-1 column span-10">
+          <h3 class="border">itp.nyu.edu</h3>
+          <p class="searching">searching...</p>
+          <ul class="results"></ul>
+          <a class="more-link column span-10" href="#">More from Google</a>
+        
+        </div>
+      </div>
     </div>
   </body>
 </html>
