@@ -1,11 +1,57 @@
+<!-- 
+
+TODO: 
+- deal with follow-up searches
+- link to more results
+- add blog blender
+- some styling
+- deploy 
+- progress indicators on searching
+
+-->
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
 <html>
   <head>
     <title>ITPoooooooooooooogle</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script src="giggle.js"></script>
+    <script src="sammy-latest.min.js"></script>
     <script>
-      $(window).load(function(){
+    
+    
+    var app = $.sammy(function() {
+
+      this.get('#/search/:q', function() {
+        $('#q').val(this.params['q']);
+        Giggle.q($("#q").val() + " site:itpedia.nyu.edu", function(results){
+        console.log(results)
+        for(i = 0; i < results.length; i++){
+          $("#itpedia .results").append('<li><a href="'+results[i].url+'">'+results[i].title+'</a></li>');
+        }
+      });
+      
+        Giggle.q($("#q").val() + " site:itp.nyu.edu", function(results){
+          console.log(results)
+          for(i = 0; i < results.length; i++){
+            $("#nyu .results").append('<li><a href="'+results[i].url+'">'+results[i].title+'</a></li>');
+          }
+        });
+      });
+    
+    });
+    
+    $(function() {
+      
+      app.run();
+      $("#search").submit(function(){
+        var before = window.location;
+        window.location.hash = "#/search/" + encodeURI($("#q").val());
+        return false;
+      });
+    });
+     /* $(window).load(function(){
         $("#search").submit(function(){
           Giggle.q($("#q").val() + " site:itpedia.nyu.edu", function(results){
             console.log(results)
@@ -22,7 +68,7 @@
           });
           return false;
         });
-      });
+      }); */
     </script>
     <style>
     .result-section {
@@ -33,7 +79,10 @@
   </head>
   <body>
     <h1>ITPoogle</h1>
-    <form id="search">
+    <div id="main">
+      
+    </div>
+    <form id="search" action="#/search">
       <input id="q" type="text" />
       <input type="submit" value="search" />
     </form>
