@@ -44,24 +44,55 @@ TODO:
         $("#result-label").html("\"" + this.params['q'] + "\"");
         $("#result-label").show();
         
-        $("#itpedia .results").empty();
-        $("#nyu .results").empty();
+        
+
 
         $(".searching").show();
+                      $(".no-results").hide();
+
+        $("#other .results").empty();
+        
+
+        for(i = 0; i < Sources.other.length; i++){
+          source = Sources.other[i];
+          Giggle.q($("#q").val() + " site:" + Sources.other[i].q, source, function(results, source){
+            
+            $("#other .searching").hide();
+            if(results.length > 0){
+              for(j = 0; j < results.length; j++){
+                $("#other .results").append('<li class="'+ ((j%2) ? "even" : "odd") + '"><a href="'+results[j].url+'">'+results[j].title+'</a> <br /><em class="source">'+source["name"]+'</em></li>');
+              }
+            } else {
+              $("#other .no-results").show();
+            }
+            // $("#other .more-link").attr("href", Giggle.googleUrl);
+          });
+        }
+
         for(i = 0; i < Sources.main.length; i++){
-          console.log(i);
-          source = Sources.main[i]
-          //var s = sources;
+          source = Sources.main[i];
+          
+          $("#"+source["id"]+" .results").empty();
+          
           Giggle.q($("#q").val() + " site:" + Sources.main[i].q, source, function(results, source){
-            console.log(source);
             $("#"+source["id"] + " .searching").hide();
+            if(results.length > 0){
+              
+            
             for(j = 0; j < results.length; j++){
               $("#"+source["id"]+" .results").append('<li class="'+ ((j%2) ? "even" : "odd") + '"><a href="'+results[j].url+'">'+results[j].title+'</a></li>');
             }
             
             $("#"+source["id"]+" .more-link").attr("href", Giggle.googleUrl);
+            
+            } else {
+              $("#"+source["id"] + " .no-results").show();
+            }
+            
           });
         }
+        
+        
 
       });
     
@@ -147,6 +178,16 @@ TODO:
       font-style:italic;
     }
     
+    .source {
+      color: #0E774A;
+      font-style: italic;
+      font-size: 10px;
+    }
+    
+    .no-results {
+      display: hidden;
+    }
+    
     </style>
   </head>
   <body>
@@ -155,31 +196,38 @@ TODO:
         <h1><span style="color:#1111CC">ITP</span><span style="color:#CC0000">o</span><span style="color:#DDDD00">o</span><span style="color:#1111CC">g</span><span style="color:#44dd44">l</span><span style="color:#DDDD00">e</span></h1>
       </div>
     
-      <div class="column span-23 border">
+      <div class="column span-24 border">
         <form id="search" action="#/search">
           <input id="q" type="text" />
           <input type="submit" value="search" />
         </form>
       </div>
       
-      <div class="column span-23">
+      <div class="column span-24">
 
         
         <h2>Results <span id="result-label"></span></h2>
-        <div id="itpedia" class="prepend-1 column span-10 ">
+        <div id="itpedia" class="column span-8 ">
           
                   
           <h3 class="border">ITPedia</h3>
           <p class="searching">searching...</p>
           <ul class="results"></ul>
-          <a class="more-link column span-10" href="#">More from Google</a>
+          <p class="no-results"><em>No results found</em></p>
+          <a class="more-link column span-8" href="#">More from Google</a>
         </div>
-        <div id="nyu" class="prepend-1 column span-10">
+        <div id="nyu" class="prepend-1 column span-8">
           <h3 class="border">itp.nyu.edu</h3>
           <p class="searching">searching...</p>
           <ul class="results"></ul>
-          <a class="more-link column span-10" href="#">More from Google</a>
-        
+          <p class="no-results"><em>No results found</em></p>
+          <a class="more-link column span-8" href="#">More from Google</a>
+        </div>
+        <div id="other" class="prepend-1 column span-5">
+          <h3 class="border">Other</h3>
+          <p class="searching">searching...</p>
+          <ul class="results"></ul>
+          <p class="no-results"><em>No results found</em></p>
         </div>
       </div>
     </div>

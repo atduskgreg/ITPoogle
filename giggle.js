@@ -1,5 +1,3 @@
-Giggle = {};
-
 Giggle = {
   GResult : function(resultData){
     this.title = resultData.title;
