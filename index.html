@@ -56,7 +56,8 @@ TODO:
 
         for(i = 0; i < Sources.other.length; i++){
           source = Sources.other[i];
-          Giggle.q($("#q").val() + " site:" + Sources.other[i].q, source, function(results, source){
+          search = new Giggle();
+          search.q($("#q").val() + " site:" + Sources.other[i].q, source, function(results, source){
             
             $("#other .searching").hide();
             if(results.length > 0){
@@ -74,8 +75,8 @@ TODO:
           source = Sources.main[i];
           
           $("#"+source["id"]+" .results").empty();
-          
-          Giggle.q($("#q").val() + " site:" + Sources.main[i].q, source, function(results, source){
+          search = new Giggle();
+          search.q($("#q").val() + " site:" + Sources.main[i].q, source, function(results, source){
             $("#"+source["id"] + " .searching").hide();
             if(results.length > 0){
               
