@@ -39,6 +39,7 @@ TODO:
 
 
       this.get('#/search/:q', function() {
+        $("#results").show()
 
         $('#q').val(this.params['q']);
         $("#result-label").html("\"" + this.params['q'] + "\"");
@@ -160,6 +161,10 @@ TODO:
       padding-left: 5px;
     }
     
+    #results {
+      display:none;
+    }
+    
     .more-link {
       background-color: #1111CC;
       color: #fff;
@@ -203,7 +208,7 @@ TODO:
         </form>
       </div>
       
-      <div class="column span-24">
+      <div id="results" class="column span-24">
 
         
         <h2>Results <span id="result-label"></span></h2>
