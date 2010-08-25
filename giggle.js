@@ -17,11 +17,11 @@ Giggle = {
     }
   },
   
-  q : function(query, callback){
-    Giggle.queryGoogle(query, 0, callback)
+  q : function(query, locals, callback){
+    Giggle.queryGoogle(query, 0, locals, callback)
   },
   
-  queryGoogle : function(q, p, callback){
+  queryGoogle : function(q, p, locals, callback){
       var currentPage = p;
       var rootUrl = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start="+p+"&q=";
       $.getJSON(rootUrl + q + "&callback=?",function(data){
@@ -30,7 +30,7 @@ Giggle = {
           Giggle.processSearchResultsPage(data);
         } else {
           Giggle.reachedMax = true;
-          callback(Giggle.results);
+          callback(Giggle.results, locals);
           Giggle.reachedMax = false;
           
           // reset
@@ -40,10 +40,10 @@ Giggle = {
         }
         
         if(currentPage + 1 < Giggle.expectedPages){
-          Giggle.queryGoogle(q, (currentPage + 1), callback);
+          Giggle.queryGoogle(q, (currentPage + 1), locals, callback);
         }
         else{
-          callback(Giggle.results);
+          callback(Giggle.results, locals);
           // reset
           Giggle.results = [];
           Giggle.expectedPages = 0;

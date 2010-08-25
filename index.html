@@ -17,20 +17,29 @@ TODO:
 
     <script>
     // MAYBE LATER:
-    // Sources = {
-    //   'itpedia' : {
-    //     "name": "itpedia",
-    //     "q" : "itpedia.nyu.edu"
-    //   },
-    //   "nyu" : {
-    //     "name" : "itp.nyu.edu",
-    //     "q" : "itp.nyu.edu"
-    //   }
-    // }
+      Sources = {
+        "main" : [
+        {
+          "name": "ITPedia",
+          "id" : "itpedia",
+          "q" : "itpedia.nyu.edu"},
+        {
+          "name" : "itp.nyu.edu",
+          "id" : "nyu",
+          "q" : "itp.nyu.edu"
+        }],
+       "other" : [
+          {
+            "name" : "Drawing Machines Syllabus",
+            "q" : "www.formconstant.net"
+          }]
+      };
     
     var app = $.sammy(function() {
 
+
       this.get('#/search/:q', function() {
+
         $('#q').val(this.params['q']);
         $("#result-label").html("\"" + this.params['q'] + "\"");
         $("#result-label").show();
@@ -39,26 +48,21 @@ TODO:
         $("#nyu .results").empty();
 
         $(".searching").show();
-        
-        Giggle.q($("#q").val() + " site:itpedia.nyu.edu", function(results){
-          $("#itpedia .searching").hide();
-
-          for(i = 0; i < results.length; i++){
-            $("#itpedia .results").append('<li class="'+ ((i%2) ? "even" : "odd") + '"><a href="'+results[i].url+'">'+results[i].title+'</a></li>');
-          }
-
-          $("#itpedia .more-link").attr("href", Giggle.googleUrl);
-        });
-      
-        Giggle.q($("#q").val() + " site:itp.nyu.edu", function(results){
-          $("#nyu .searching").hide();
-
-          for(i = 0; i < results.length; i++){
+        for(i = 0; i < Sources.main.length; i++){
+          console.log(i);
+          source = Sources.main[i]
+          //var s = sources;
+          Giggle.q($("#q").val() + " site:" + Sources.main[i].q, source, function(results, source){
+            console.log(source);
+            $("#"+source["id"] + " .searching").hide();
+            for(j = 0; j < results.length; j++){
+              $("#"+source["id"]+" .results").append('<li class="'+ ((j%2) ? "even" : "odd") + '"><a href="'+results[j].url+'">'+results[j].title+'</a></li>');
+            }
             
-            $("#nyu .results").append('<li class="'+ ((i%2) ? "even" : "odd") + '"><a href="'+results[i].url+'">'+results[i].title+'</a></li>');
-          }
-          $("#nyu .more-link").attr("href", Giggle.googleUrl);
-        });
+            $("#"+source["id"]+" .more-link").attr("href", Giggle.googleUrl);
+          });
+        }
+
       });
     
     });
